@@ -9,9 +9,9 @@ import (
 )
 
 func main() {
-	fileServer := http.FileServer(http.Dir("./static"))
-	http.Handle("/", fileServer)
-	http.HandleFunc("/serve", serve)
+	//fileServer := http.FileServer(http.Dir("./static"))
+	//http.Handle("/", fileServer)
+	http.HandleFunc("/", serve)
 	http.HandleFunc("/form", formHandler)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 	//	fmt.Printf("Hello")
@@ -32,14 +32,28 @@ func serve(w http.ResponseWriter, r *http.Request) {
 		log.Print(err)
 		return
 	}
-	http.ServeFile(w, r, wd+r.URL.Path[1:])
+	log.Print(r.URL)
+	http.ServeFile(w, r, wd+r.URL.Path)
 }
 
 func formHandler(w http.ResponseWriter, r *http.Request) {
-	r.ParseForm()
-	jsn, _ := json.MarshalIndent(r.Form, "", " ")
+	if err := r.ParseForm(); err != nil {
+		fmt.Fprintf(w, "Parseform() err: %v", err)
+	}
+
+	jsn, err := json.MarshalIndent(r.Form, "", " ")
+	if err != nil {
+		log.Printf("error: %v", err)
+	}
 	fmt.Fprintf(w, string(jsn))
 }
+
+//fmt.Fprintf(w, "POST request success")
+//name := r.FormValue("name")
+//address := r.FormValue("address")
+//fmt.Fprintf(w, "Name = %s\n", name)
+//fmt.Fprintf(w, "Address = %s\n", address)
+//}
 
 //func formHandler(w http.ResponseWriter, r *http.Request) {
 //	if err := r.ParseForm(); err != nil {
