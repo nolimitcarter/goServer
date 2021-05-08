@@ -1,8 +1,6 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -12,7 +10,7 @@ func main() {
 	//fileServer := http.FileServer(http.Dir("./static"))
 	//http.Handle("/", fileServer)
 	http.HandleFunc("/", serve)
-	http.HandleFunc("/form", formHandler)
+	//http.HandleFunc("form", formHandler)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 	//	fmt.Printf("Hello")
 	//	if err := http.ListenAndServe(":8080", nil); err != nil {
@@ -36,7 +34,7 @@ func serve(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, wd+r.URL.Path)
 }
 
-func formHandler(w http.ResponseWriter, r *http.Request) {
+/*func formHandler(w http.ResponseWriter, r *http.Request) {
 	if err := r.ParseForm(); err != nil {
 		fmt.Fprintf(w, "Parseform() err: %v", err)
 	}
@@ -53,7 +51,7 @@ func formHandler(w http.ResponseWriter, r *http.Request) {
 //address := r.FormValue("address")
 //fmt.Fprintf(w, "Name = %s\n", name)
 //fmt.Fprintf(w, "Address = %s\n", address)
-//}
+//}*/
 
 //func formHandler(w http.ResponseWriter, r *http.Request) {
 //	if err := r.ParseForm(); err != nil {
